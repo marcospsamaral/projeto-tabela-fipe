@@ -1,8 +1,6 @@
 package com.example.tabela.fipe;
 
-import com.example.tabela.fipe.model.Ano;
-import com.example.tabela.fipe.model.Marca;
-import com.example.tabela.fipe.model.Modelo;
+import com.example.tabela.fipe.model.*;
 import com.example.tabela.fipe.service.ConsumoApi;
 import com.example.tabela.fipe.service.ConverteDados;
 
@@ -87,7 +85,6 @@ public class Principal {
         while (!umModeloEncontrado) {
             System.out.println("Digite o código ou nome do modelo desejado para escolher\nOU\nDigite parte do nome para filtrar:");
             String modeloDigitado = scanner.nextLine();
-            System.out.println("\n");
 
             try {
                 int intModelo = Integer.parseInt(modeloDigitado);
@@ -124,10 +121,17 @@ public class Principal {
         json = consumo.obterDados(endereco);
 
         List<Ano> anos = conversor.obterDados(json, Ano.class);
+        List<FipeInformations> fipeInformations = new ArrayList<>();
 
-        for (int i = 0; i < anos.size(); i++) {
-            System.out.println(anos.get(i));
+        for (Ano ano : anos) {
+            json = consumo.obterDados(endereco + ano.codigo());
+            fipeInformations.add(conversor.obterDadosObjeto(json, FipeInformations.class));
         }
 
+        List<Veiculo> veiculos = fipeInformations.stream()
+                .map(f -> new Veiculo(f.preco(), f.marca(), f.modelo(), f.mesReferencia(), f.combustivel()))
+                .collect(Collectors.toList());
+
+        veiculos.forEach(System.out::println);
     }
 }
