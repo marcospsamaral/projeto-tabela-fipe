@@ -37,7 +37,7 @@ public class Principal {
 
         var json = consumo.obterDados(endereco);
 
-        List<Marca> marcas = conversor.obterDados(json, Marca.class);
+        List<Marca> marcas = conversor.obterLista(json, Marca.class);
 
         System.out.println("Marcas encontradas do veículo selecionado: ");
         marcas.stream()
@@ -71,7 +71,7 @@ public class Principal {
         endereco += marcaEncontrada.get().codigo() + "/models/";
 
         json = consumo.obterDados(endereco);
-        List<Modelo> modelos = conversor.obterDados(json, Modelo.class);
+        List<Modelo> modelos = conversor.obterLista(json, Modelo.class);
 
         System.out.println("\nModelos encontrados: ");
         modelos.stream()
@@ -120,16 +120,16 @@ public class Principal {
 
         json = consumo.obterDados(endereco);
 
-        List<Ano> anos = conversor.obterDados(json, Ano.class);
+        List<Ano> anos = conversor.obterLista(json, Ano.class);
         List<FipeInformations> fipeInformations = new ArrayList<>();
 
         for (Ano ano : anos) {
             json = consumo.obterDados(endereco + ano.codigo());
-            fipeInformations.add(conversor.obterDadosObjeto(json, FipeInformations.class));
+            fipeInformations.add(conversor.obterDados(json, FipeInformations.class));
         }
 
         List<Veiculo> veiculos = fipeInformations.stream()
-                .map(f -> new Veiculo(f.preco(), f.marca(), f.modelo(), f.mesReferencia(), f.combustivel()))
+                .map(f -> new Veiculo(f.preco(), f.marca(), f.modelo(), f.anoModelo(), f.combustivel()))
                 .collect(Collectors.toList());
 
         veiculos.forEach(System.out::println);

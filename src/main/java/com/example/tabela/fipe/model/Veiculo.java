@@ -13,16 +13,11 @@ public class Veiculo {
     private int ano;
     private String combustivel;
 
-    public Veiculo(String valor, String marca, String modelo, String ano, String combustivel) {
+    public Veiculo(String valor, String marca, String modelo, int ano, String combustivel) {
         this.valor = valor;
         this.marca = marca;
         this.modelo = modelo;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM 'de' yyyy", new Locale("pt", "BR"));
-            this.ano = YearMonth.parse(ano, formatter).getYear();
-        } catch (Exception e) {
-            this.ano = Integer.parseInt(ano.substring(ano.length()-4));
-        }
+        this.ano = ano;
         this.combustivel = combustivel;
     }
 

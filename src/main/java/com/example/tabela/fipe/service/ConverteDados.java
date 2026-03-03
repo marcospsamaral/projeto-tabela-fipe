@@ -1,7 +1,6 @@
 package com.example.tabela.fipe.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
@@ -11,7 +10,7 @@ public class ConverteDados implements IConverteDados{
     ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public <T> List<T> obterDados(String json, Class<T> classe) {
+    public <T> List<T> obterLista(String json, Class<T> classe) {
         try {
             CollectionType listType = mapper.getTypeFactory()
                     .constructCollectionType(List.class, classe);
@@ -22,7 +21,8 @@ public class ConverteDados implements IConverteDados{
         }
     }
 
-    public <T> T obterDadosObjeto(String json, Class<T> classe) {
+    @Override
+    public <T> T obterDados(String json, Class<T> classe) {
         try {
             return mapper.readValue(json, classe);
         } catch (JsonProcessingException e) {
